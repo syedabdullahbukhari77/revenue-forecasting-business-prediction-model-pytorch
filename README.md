@@ -1,5 +1,9 @@
 # 📊 Business KPI Prediction from Financial Data (PyTorch)
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]([https://colab.research.google.com/github/syedabdullahbukhari77/Revenue_Forecasting_Business_Prediction_model_Pytorch/blob/main/notebooks/demo.ipynb](https://colab.research.google.com/drive/1PZDRWDH1c7dxteG9uOvPkiQ5mfuMPHw7))
+
+---
+
 ## 1. Introduction
 This repository implements a **multi-task deep learning model** for predicting key business performance indicators (KPIs) from tabular financial/accounting data.  
 The model jointly learns three predictive tasks:
@@ -18,7 +22,7 @@ Conventional financial forecasting methods (linear models, rule-based systems, s
 This project demonstrates how **multi-task learning (MTL)** can serve as a scalable, modern approach to forecasting KPIs, providing:
 
 - **One model → multiple outputs**  
-- **Feature integration** across categorical, numerical, and time-based inputs  
+- **Feature integration** across categorical, numerical, and temporal inputs  
 - **Extensible baseline** for real-world datasets  
 
 ---
@@ -46,10 +50,21 @@ This project demonstrates how **multi-task learning (MTL)** can serve as a scala
 
 ---
 
-## 5. Training Setup
+## 5. Preprocessing Pipeline
+All preprocessing steps are modularized in `preprocessing.py`:
+- Missing value handling  
+- Feature scaling (with `scaler.pkl`)  
+- Label/categorical encoding (with `encoders.pkl`)  
+- Automatic column validation during inference  
+
+This ensures **consistency between training and deployment**.
+
+---
+
+## 6. Training Setup
 - **Split:** 2020–2024 → training | 2024–2025 → validation/testing  
 - **Optimizer:** Adam (`lr = 5e-5`)  
-- **Loss:** `Loss = MSE(revenue) + MSE(risk) + BCE(churn)`  
+- **Loss:** MSE(revenue) + MSE(risk) + BCE(churn)
 - **Batch size:** 128  
 - **Epochs:** 100  
 
@@ -64,7 +79,7 @@ This project demonstrates how **multi-task learning (MTL)** can serve as a scala
 
 ---
 
-## 6. Results
+## 7. Results
 - Model shows **stable convergence** on all three tasks.  
 - Training and validation losses are closely aligned → low overfitting on synthetic data.  
 - Demonstrates feasibility of **joint KPI forecasting** using deep learning.  
@@ -73,10 +88,19 @@ This project demonstrates how **multi-task learning (MTL)** can serve as a scala
 
 ---
 
-## 7. Usage
+## 8. Deployment (Streamlit App)
+This repository includes a **Streamlit web app** for interactive predictions.
 
-### Installation
+### Run Locally
+Make sure you have trained the model and saved artifacts (`finance_model.pth`, `scaler.pkl`, `encoders.pkl`) in the `models/` folder.
+
 ```bash
-git clone https://github.com/syedabdullahbukhari77/Revenue_Forecasting_Business_Prediction_model_Pytorch
-cd Revenue_Forecasting_Business_Prediction_model_Pytorch
-pip install -r requirements.txt
+# Step 1: Train the model
+python train.py
+
+# Step 2: Validate model performance
+python validate.py
+
+# Step 3: Launch Streamlit app
+streamlit run server/app.py
+
